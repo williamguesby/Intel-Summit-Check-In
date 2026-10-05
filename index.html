@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f3f5f0">
+  <meta name="theme-color" content="#f5f2fa">
   <title>Sustainability Summit | Check-in</title>
   <style>
     :root {
@@ -444,17 +444,17 @@
     }
 
     :root {
-      --paper: #f4f6f8;
-      --ink: #354457;
-      --muted: #718096;
-      --line: #e5ebf1;
-      --forest: #0879c9;
-      --water: #087fc5;
-      --water-pale: #e6f5fc;
-      --zero: #4c9b65;
-      --zero-pale: #e8f8ee;
-      --renew: #cb8530;
-      --renew-pale: #fff5e8;
+      --paper: #f5f2fa;
+      --ink: #322844;
+      --muted: #786e89;
+      --line: #e6deef;
+      --forest: #50377f;
+      --water: #6851ad;
+      --water-pale: #eee9f8;
+      --zero: #269f98;
+      --zero-pale: #e3f5f2;
+      --renew: #b87950;
+      --renew-pale: #f8eee7;
       --white: #fff;
     }
 
@@ -465,8 +465,8 @@
       display: grid;
       place-items: center;
       padding: 30px 20px 38px;
-      background-color: #0879c9;
-      background-image: repeating-linear-gradient(128deg, transparent 0 18px, rgb(255 255 255 / 3%) 18px 20px);
+      background-color: #50377f;
+      background-image: repeating-linear-gradient(128deg, transparent 0 18px, rgb(105 218 205 / 7%) 18px 20px);
       color: #fff;
       text-align: center;
     }
@@ -474,9 +474,9 @@
     .hero-inner { width: min(100%, 760px); }
     .brand { justify-content: center; color: #fff; font-size: 34px; font-weight: 850; letter-spacing: 0; line-height: 1; text-transform: lowercase; }
     .brand-mark { display: none; }
-    .brand-dot { color: #c8efff; }
+    .brand-dot { color: #a8e9df; }
     .hero h1 { max-width: none; margin: 24px 0 0; font-family: inherit; font-size: 35px; font-weight: 800; letter-spacing: 0; line-height: 1.15; }
-    .hero-rule { display: block; width: 76px; height: 3px; margin: 20px auto 21px; background: #13c3e6; }
+    .hero-rule { display: block; width: 76px; height: 3px; margin: 20px auto 21px; background: #45c4b6; }
     .hero-caption { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0; color: rgb(255 255 255 / 90%); font-size: 16px; }
     .hero-leaf { color: #fff; font-size: 19px; }
 
@@ -487,7 +487,7 @@
     .summary-line strong { color: var(--water); font-size: 18px; font-variant-numeric: tabular-nums; }
     .summary-target { display: flex; align-items: baseline; gap: 3px; }
     .progress-track { width: min(385px, 100%); height: 12px; margin: 15px auto 0; background: #dedfe1; }
-    .progress-fill { background: linear-gradient(90deg, #0879c9, #08b3dc); }
+    .progress-fill { background: linear-gradient(90deg, #6851ad, #39bdb1); }
     .progress-caption { width: min(385px, 100%); margin: 8px auto 0; font-size: 11px; }
 
     .checkin-panel {
@@ -505,8 +505,8 @@
       margin: 0 0 12px;
       padding: 14px 12px;
       border-radius: 7px;
-      background: #e7f4fd;
-      color: #34465b;
+      background: #eee9f8;
+      color: #403453;
       font-size: 13px;
       font-weight: 700;
       text-align: center;
@@ -519,23 +519,23 @@
     .form-grid > div { min-width: 0; }
     .form-grid label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
     input, select { height: 43px; padding: 0 13px; border-color: #e2e6ea; border-radius: 10px; box-shadow: 0 2px 7px rgb(35 58 77 / 5%); font-size: 13px; }
-    input:focus, select:focus { border-color: var(--water); box-shadow: 0 0 0 3px rgb(8 121 201 / 13%); }
-    .primary-button { height: 43px; min-height: 43px; padding: 0 15px; border-radius: 10px; background: #0879c9; box-shadow: 0 4px 10px rgb(8 121 201 / 20%); white-space: nowrap; }
-    .primary-button:hover { background: #066aaf; }
-    .primary-button:focus-visible, .remove-button:focus-visible, summary:focus-visible { outline: 3px solid #53c7e8; outline-offset: 2px; }
+    input:focus, select:focus { border-color: var(--water); box-shadow: 0 0 0 3px rgb(104 81 173 / 15%); }
+    .primary-button { height: 43px; min-height: 43px; padding: 0 15px; border-radius: 10px; background: var(--forest); box-shadow: 0 4px 10px rgb(80 55 127 / 20%); white-space: nowrap; }
+    .primary-button:hover { background: #3f2a6b; }
+    .primary-button:focus-visible, .remove-button:focus-visible, summary:focus-visible { outline: 3px solid #45c4b6; outline-offset: 2px; }
 
     .panel-divider { height: 1px; margin: 23px 0 19px; border: 0; background: #edf0f3; }
     .team-panel { padding: 0; border: 0; background: transparent; }
     .team-panel h2 { margin: 0; color: #738399; font-size: 13px; text-align: center; }
     .team-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 16px; }
     .team-card { position: relative; min-width: 0; min-height: 66px; display: grid; align-content: center; justify-items: center; gap: 7px; padding: 10px 6px; border: 1px solid transparent; border-radius: 10px; text-align: center; }
-    .team-card.winning-team { border-color: #4c9b65; box-shadow: inset 0 0 0 1px #4c9b65; }
+    .team-card.winning-team { border-color: var(--zero); box-shadow: inset 0 0 0 1px var(--zero); }
     .team-card-heading { display: flex; align-items: center; justify-content: center; gap: 5px; min-width: 0; }
     .team-icon { font-size: 12px; }
     .team-name { overflow-wrap: anywhere; color: #53647a; font-size: 11px; font-weight: 700; }
     .team-score { color: #36465a; font-size: 13px; font-weight: 650; font-variant-numeric: tabular-nums; }
     .team-unit { display: none; }
-    .winner-badge { position: absolute; top: -8px; right: 5px; padding: 3px 5px; border-radius: 8px; background: #4c9b65; color: white; font-size: 7px; }
+    .winner-badge { position: absolute; top: -8px; right: 5px; padding: 3px 5px; border-radius: 8px; background: var(--zero); color: white; font-size: 7px; }
 
     .celebration { margin-top: 17px; border-radius: 7px; }
     .celebration[hidden] { display: none; }
