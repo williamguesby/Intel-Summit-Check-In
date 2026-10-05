@@ -296,10 +296,45 @@
       border-top: 1px solid #e8ece8;
     }
 
+    .team-row.winning-team {
+      border-top-color: #ccd9ab;
+      background: #f2f7e6;
+    }
+
     .team-swatch { width: 10px; height: 30px; border-radius: 2px; }
+    .team-label { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .team-name { font-size: 12px; font-weight: 700; }
     .team-score { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
     .team-unit { color: var(--muted); font-size: 10px; font-weight: 500; }
+    .winner-badge { color: var(--forest); font-size: 8px; font-weight: 850; letter-spacing: .07em; }
+
+    .celebration {
+      display: grid;
+      gap: 4px;
+      margin-top: 17px;
+      padding: 13px 15px;
+      border-left: 4px solid var(--zero);
+      background: var(--zero-pale);
+      color: var(--ink);
+      animation: appear .35s ease-out both;
+    }
+
+    .celebration[hidden] { display: none; }
+    .celebration strong { color: var(--forest); font-size: 13px; }
+    .celebration span { font-size: 12px; line-height: 1.5; }
+
+    .reflection-section {
+      margin-top: 43px;
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+    }
+
+    .reflection-heading { margin-bottom: 20px; }
+    .reflection-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+    .reflection-item { padding: 0 22px; border-left: 1px solid var(--line); }
+    .reflection-item:first-child { padding-left: 0; border-left: 0; }
+    .reflection-item h3 { margin: 0 0 9px; font-size: 13px; }
+    .reflection-item p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
 
     .recent-panel { overflow: hidden; }
 
@@ -385,6 +420,9 @@
       .intro-note { max-width: 410px; }
       .dashboard { grid-template-columns: 1fr; }
       .right-column { grid-template-columns: 1fr 1fr; align-items: start; }
+      .reflection-grid { grid-template-columns: 1fr; gap: 18px; }
+      .reflection-item, .reflection-item:first-child { padding: 17px 0 0; border-top: 1px solid var(--line); border-left: 0; }
+      .reflection-item:first-child { padding-top: 0; border-top: 0; }
     }
 
     @media (max-width: 540px) {
@@ -470,6 +508,7 @@
             <div class="progress-fill" id="progress-fill"></div>
           </div>
           <div class="progress-caption"><span id="progress-message">The room is ready for you.</span><span id="progress-percent">0%</span></div>
+          <div class="celebration" id="celebration" role="status" aria-live="polite" hidden></div>
         </section>
 
         <section class="panel recent-panel" aria-labelledby="recent-title">
@@ -493,6 +532,27 @@
         </section>
       </aside>
     </div>
+
+    <section class="reflection-section" aria-labelledby="reflection-title">
+      <div class="reflection-heading">
+        <p class="eyebrow">Project reflections</p>
+        <h2 id="reflection-title">What I learned building this</h2>
+      </div>
+      <div class="reflection-grid">
+        <article class="reflection-item">
+          <h3>What I understand better</h3>
+          <p>I understand how one attendee list can act as the source of truth for the whole page. When someone checks in, I update that list and recalculate the total, each team’s turnout, and the progress toward the goal. This keeps the numbers in sync instead of maintaining separate counters that could drift apart.</p>
+        </article>
+        <article class="reflection-item">
+          <h3>What I could explain in an interview</h3>
+          <p>I could explain how the form submit event prevents a page reload, validates and normalizes a name, and adds an attendee object with a team and check-in time. I would also describe how the interface is re-rendered from that data and how localStorage restores it after a refresh. I’d note that localStorage is suitable for this demo, but not shared across multiple check-in devices.</p>
+        </article>
+        <article class="reflection-item">
+          <h3>Real-world demo scenario</h3>
+          <p>At the summit entrance, a volunteer enters an employee’s name, selects Water Wise, Net Zero, or Renewables, and checks them in. The attendee list, team leaderboard, and progress toward 120 update immediately. In a real multi-kiosk event, I would replace device-only storage with a shared, access-controlled service so every station sees the same attendance.</p>
+        </article>
+      </div>
+    </section>
 
     <div class="footer-note"><span>One summit. Three teams. A shared goal.</span><span>Attendance is saved on this device.</span></div>
   </main>
@@ -534,18 +594,22 @@
       greeting.classList.toggle("error", isError);
     }
 
-    function renderTeams() {
+    function renderTeams(goalReached) {
       const counts = Object.fromEntries(TEAMS.map((team) => [team.id, 0]));
       attendees.forEach((attendee) => { counts[attendee.team] += 1; });
       const rankedTeams = [...TEAMS].sort((first, second) => counts[second.id] - counts[first.id]);
+      const leadingCount = Math.max(...Object.values(counts));
+      const winningTeams = goalReached ? rankedTeams.filter((team) => counts[team.id] === leadingCount) : [];
 
       document.querySelector("#team-list").innerHTML = rankedTeams.map((team) => `
-        <div class="team-row">
+        <div class="team-row${winningTeams.some((winner) => winner.id === team.id) ? " winning-team" : ""}">
           <span class="team-swatch" style="background:${team.color}" aria-hidden="true"></span>
-          <span class="team-name">${team.name}</span>
-          <span class="team-score">${counts[team.id]} <span class="team-unit">${counts[team.id] === 1 ? "here" : "here"}</span></span>
+          <span class="team-label"><span class="team-name">${team.name}</span>${winningTeams.some((winner) => winner.id === team.id) ? '<span class="winner-badge">WINNER</span>' : ""}</span>
+          <span class="team-score">${counts[team.id]} <span class="team-unit">${counts[team.id] === 1 ? "attendee" : "attendees"}</span></span>
         </div>
       `).join("");
+
+      return { teams: winningTeams, count: leadingCount };
     }
 
     function renderAttendees() {
@@ -595,8 +659,18 @@
       document.querySelector("#progress-track").setAttribute("aria-valuenow", Math.min(total, ATTENDANCE_GOAL));
       document.querySelector("#progress-message").textContent = total >= ATTENDANCE_GOAL ? "Summit goal reached. Great work!" : total === 0 ? "The room is ready for you." : `${ATTENDANCE_GOAL - total} more to reach our goal.`;
       document.querySelector("#recent-count").textContent = `${total} ${total === 1 ? "attendee" : "attendees"}`;
-      renderTeams();
+      const { teams: winningTeams, count: winningCount } = renderTeams(total >= ATTENDANCE_GOAL);
       renderAttendees();
+
+      const celebration = document.querySelector("#celebration");
+      if (total >= ATTENDANCE_GOAL) {
+        const winnerNames = winningTeams.map((team) => team.name).join(" and ");
+        celebration.innerHTML = `<strong>Summit goal reached!</strong><span>${winnerNames} ${winningTeams.length === 1 ? "leads" : "are tied for the lead"} with ${winningCount} check-ins. Great turnout!</span>`;
+        celebration.hidden = false;
+      } else {
+        celebration.hidden = true;
+        celebration.textContent = "";
+      }
     }
 
     form.addEventListener("submit", (event) => {
