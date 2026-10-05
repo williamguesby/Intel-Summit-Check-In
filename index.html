@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f3f5f0">
+  <title>Sustainability Summit | Check-in</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f5f0;
+      --ink: #182b27;
+      --muted: #66746f;
+      --line: #d7ded8;
+      --forest: #174f40;
+      --mint: #c8e8d4;
+      --lime: #d7f05b;
+      --water: #277c91;
+      --water-pale: #d9eef0;
+      --zero: #648b37;
+      --zero-pale: #e6efd4;
+      --renew: #bd6542;
+      --renew-pale: #f4e2d8;
+      --white: #fffefa;
+      font-family: "Avenir Next", Avenir, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-width: 320px;
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    button, input, select { font: inherit; }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 17px clamp(20px, 5vw, 76px);
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--forest);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 32px;
+      aspect-ratio: 1;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--forest);
+      color: var(--lime);
+      font-size: 17px;
+    }
+
+    .event-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    main {
+      width: min(1180px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 55px 0 72px;
+    }
+
+    .intro {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 36px;
+      animation: appear .5s ease-out both;
+    }
+
+    .eyebrow {
+      margin: 0 0 13px;
+      color: var(--water);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 680px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(42px, 6vw, 72px);
+      font-weight: 500;
+      letter-spacing: -.035em;
+      line-height: .98;
+    }
+
+    .intro-note {
+      max-width: 220px;
+      margin: 0 0 5px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.55fr) minmax(300px, .9fr);
+      align-items: start;
+      gap: 18px;
+    }
+
+    .left-column, .right-column { display: grid; gap: 18px; }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--white);
+    }
+
+    .checkin-panel { padding: 26px; }
+
+    .panel-heading {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 23px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 750;
+      letter-spacing: 0;
+    }
+
+    .section-kicker {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .live-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 9px;
+      border-radius: 3px;
+      background: #edf4e9;
+      color: var(--forest);
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .live-tag::before {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #57a46b;
+      content: "";
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(190px, .85fr);
+      gap: 14px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 7px;
+      color: #43524d;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    input, select {
+      width: 100%;
+      height: 46px;
+      padding: 0 12px;
+      border: 1px solid #cbd5ce;
+      border-radius: 3px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: var(--water);
+      box-shadow: 0 0 0 3px rgb(39 124 145 / 14%);
+    }
+
+    .form-actions {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-top: 18px;
+    }
+
+    .primary-button {
+      min-height: 44px;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 3px;
+      background: var(--forest);
+      color: white;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 750;
+      transition: background .15s ease, transform .15s ease;
+    }
+
+    .primary-button:hover { background: #236a54; }
+    .primary-button:active { transform: translateY(1px); }
+
+    .greeting {
+      min-height: 20px;
+      margin: 0;
+      color: var(--forest);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .greeting.error { color: #a83f30; }
+
+    .attendance-panel { padding: 25px 26px 23px; }
+
+    .attendance-total {
+      display: flex;
+      align-items: baseline;
+      gap: 7px;
+      margin: 21px 0 13px;
+    }
+
+    .attendance-number {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 48px;
+      line-height: 1;
+    }
+
+    .attendance-target { color: var(--muted); font-size: 13px; }
+
+    .progress-track {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: #e4e9e3;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--water);
+      transition: width .35s ease;
+    }
+
+    .progress-caption {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .team-panel { padding: 25px 22px 19px; }
+
+    .team-list { margin-top: 17px; }
+
+    .team-row {
+      display: grid;
+      grid-template-columns: 12px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      min-height: 57px;
+      border-top: 1px solid #e8ece8;
+    }
+
+    .team-swatch { width: 10px; height: 30px; border-radius: 2px; }
+    .team-name { font-size: 12px; font-weight: 700; }
+    .team-score { font-size: 18px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .team-unit { color: var(--muted); font-size: 10px; font-weight: 500; }
+
+    .recent-panel { overflow: hidden; }
+
+    .recent-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 19px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .recent-count {
+      color: var(--muted);
+      font-size: 11px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .checkin-list { max-height: 355px; overflow: auto; }
+
+    .checkin-entry {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto 30px;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 18px 13px 22px;
+      border-bottom: 1px solid #edf0ec;
+      animation: appear .25s ease-out both;
+    }
+
+    .attendee-name { overflow-wrap: anywhere; font-size: 12px; font-weight: 750; }
+    .attendee-team { margin-top: 4px; color: var(--muted); font-size: 10px; }
+
+    .team-pill {
+      padding: 6px 8px;
+      border-radius: 2px;
+      font-size: 9px;
+      font-weight: 800;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .remove-button {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      border: 0;
+      border-radius: 3px;
+      background: transparent;
+      color: #74807b;
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .remove-button:hover { background: #f3e9e4; color: #a83f30; }
+
+    .empty-state {
+      padding: 27px 22px 30px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .footer-note {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 16px 2px 0;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 760px) {
+      main { padding-top: 38px; }
+      .intro { align-items: start; flex-direction: column; gap: 14px; }
+      .intro-note { max-width: 410px; }
+      .dashboard { grid-template-columns: 1fr; }
+      .right-column { grid-template-columns: 1fr 1fr; align-items: start; }
+    }
+
+    @media (max-width: 540px) {
+      .topbar { align-items: start; padding: 14px 18px; }
+      .brand { font-size: 11px; }
+      .event-label { max-width: 105px; font-size: 9px; text-align: right; }
+      main { width: calc(100% - 32px); padding-top: 34px; }
+      h1 { font-size: 48px; }
+      .checkin-panel, .attendance-panel { padding: 21px 18px; }
+      .form-grid { grid-template-columns: 1fr; gap: 13px; }
+      .form-actions { align-items: start; flex-direction: column; }
+      .right-column { grid-template-columns: 1fr; }
+      .team-panel { padding: 21px 18px 15px; }
+      .footer-note { flex-direction: column; gap: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">↗</span> Intel Sustainability</div>
+    <div class="event-label">Company-wide summit · Check-in</div>
+  </header>
+
+  <main>
+    <section class="intro" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">A better future starts here</p>
+        <h1 id="page-title">Welcome to the<br>Summit.</h1>
+      </div>
+      <p class="intro-note">Every person here moves us closer to a more sustainable future. Find your team and get checked in.</p>
+    </section>
+
+    <div class="dashboard">
+      <div class="left-column">
+        <section class="panel checkin-panel" aria-labelledby="checkin-title">
+          <div class="panel-heading">
+            <div>
+              <h2 id="checkin-title">Attendee check-in</h2>
+              <p class="section-kicker">Add an employee to today's attendance.</p>
+            </div>
+            <span class="live-tag">Check-in open</span>
+          </div>
+          <form id="checkin-form">
+            <div class="form-grid">
+              <div>
+                <label for="attendee-name">Employee name</label>
+                <input id="attendee-name" name="name" autocomplete="name" placeholder="e.g. Alex Morgan" required maxlength="80">
+              </div>
+              <div>
+                <label for="attendee-team">Sustainability team</label>
+                <select id="attendee-team" name="team" required>
+                  <option value="" selected disabled>Select a team</option>
+                  <option value="water">Team Water Wise</option>
+                  <option value="netzero">Team Net Zero</option>
+                  <option value="renewables">Team Renewables</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button class="primary-button" type="submit">Check in attendee</button>
+              <p class="greeting" id="greeting" role="status" aria-live="polite">Ready when you are.</p>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel attendance-panel" aria-labelledby="attendance-title">
+          <div class="panel-heading">
+            <div>
+              <h2 id="attendance-title">Summit attendance</h2>
+              <p class="section-kicker">Together, we're building momentum.</p>
+            </div>
+            <span class="live-tag">Live total</span>
+          </div>
+          <div class="attendance-total" aria-label="Attendance">
+            <span class="attendance-number" id="attendance-count">0</span>
+            <span class="attendance-target">of <span id="attendance-goal">120</span> expected</span>
+          </div>
+          <div class="progress-track" id="progress-track" role="progressbar" aria-label="Attendance toward summit goal" aria-valuemin="0" aria-valuemax="120" aria-valuenow="0">
+            <div class="progress-fill" id="progress-fill"></div>
+          </div>
+          <div class="progress-caption"><span id="progress-message">The room is ready for you.</span><span id="progress-percent">0%</span></div>
+        </section>
+
+        <section class="panel recent-panel" aria-labelledby="recent-title">
+          <div class="recent-heading">
+            <h2 id="recent-title">Recent check-ins</h2>
+            <span class="recent-count" id="recent-count">0 attendees</span>
+          </div>
+          <div class="checkin-list" id="checkin-list" aria-live="polite">
+            <div class="empty-state" id="empty-state">Your first check-in will appear here.</div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right-column" aria-label="Team turnout">
+        <section class="panel team-panel" aria-labelledby="teams-title">
+          <div>
+            <h2 id="teams-title">Team turnout</h2>
+            <p class="section-kicker">The friendly leaderboard</p>
+          </div>
+          <div class="team-list" id="team-list"></div>
+        </section>
+      </aside>
+    </div>
+
+    <div class="footer-note"><span>One summit. Three teams. A shared goal.</span><span>Attendance is saved on this device.</span></div>
+  </main>
+
+  <script>
+    const TEAMS = [
+      { id: "water", name: "Team Water Wise", color: "var(--water)", pale: "var(--water-pale)" },
+      { id: "netzero", name: "Team Net Zero", color: "var(--zero)", pale: "var(--zero-pale)" },
+      { id: "renewables", name: "Team Renewables", color: "var(--renew)", pale: "var(--renew-pale)" }
+    ];
+    const ATTENDANCE_GOAL = 120;
+    const STORAGE_KEY = "intel-summit-checkins-v1";
+    const form = document.querySelector("#checkin-form");
+    const nameInput = document.querySelector("#attendee-name");
+    const teamInput = document.querySelector("#attendee-team");
+    const greeting = document.querySelector("#greeting");
+    const attendeeList = document.querySelector("#checkin-list");
+    let attendees = loadAttendees();
+
+    function loadAttendees() {
+      try {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        return Array.isArray(saved) ? saved.filter((attendee) => attendee && typeof attendee.name === "string" && TEAMS.some((team) => team.id === attendee.team)) : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function saveAttendees() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(attendees));
+      } catch {
+        setGreeting("Couldn't save attendance in this browser.", true);
+      }
+    }
+
+    function setGreeting(message, isError = false) {
+      greeting.textContent = message;
+      greeting.classList.toggle("error", isError);
+    }
+
+    function renderTeams() {
+      const counts = Object.fromEntries(TEAMS.map((team) => [team.id, 0]));
+      attendees.forEach((attendee) => { counts[attendee.team] += 1; });
+      const rankedTeams = [...TEAMS].sort((first, second) => counts[second.id] - counts[first.id]);
+
+      document.querySelector("#team-list").innerHTML = rankedTeams.map((team) => `
+        <div class="team-row">
+          <span class="team-swatch" style="background:${team.color}" aria-hidden="true"></span>
+          <span class="team-name">${team.name}</span>
+          <span class="team-score">${counts[team.id]} <span class="team-unit">${counts[team.id] === 1 ? "here" : "here"}</span></span>
+        </div>
+      `).join("");
+    }
+
+    function renderAttendees() {
+      if (attendees.length === 0) {
+        attendeeList.innerHTML = '<div class="empty-state" id="empty-state">Your first check-in will appear here.</div>';
+        return;
+      }
+
+      attendees.slice().reverse().forEach((attendee) => {
+        const team = TEAMS.find((item) => item.id === attendee.team);
+        const row = document.createElement("div");
+        const details = document.createElement("div");
+        const name = document.createElement("div");
+        const time = document.createElement("div");
+        const teamLabel = document.createElement("span");
+        const removeButton = document.createElement("button");
+
+        row.className = "checkin-entry";
+        name.className = "attendee-name";
+        name.textContent = attendee.name;
+        time.className = "attendee-team";
+        time.textContent = `Checked in ${attendee.time || "today"}`;
+        details.append(name, time);
+        teamLabel.className = "team-pill";
+        teamLabel.style.background = team.pale;
+        teamLabel.style.color = team.color;
+        teamLabel.textContent = team.name.replace("Team ", "");
+        removeButton.className = "remove-button";
+        removeButton.type = "button";
+        removeButton.dataset.remove = attendee.id;
+        removeButton.setAttribute("aria-label", `Remove ${attendee.name}`);
+        removeButton.title = "Remove check-in";
+        removeButton.textContent = "×";
+        row.append(details, teamLabel, removeButton);
+        attendeeList.append(row);
+      });
+    }
+
+    function render() {
+      const total = attendees.length;
+      const percent = Math.min(100, Math.round((total / ATTENDANCE_GOAL) * 100));
+      document.querySelector("#attendance-count").textContent = total;
+      document.querySelector("#attendance-goal").textContent = ATTENDANCE_GOAL;
+      document.querySelector("#progress-fill").style.width = `${percent}%`;
+      document.querySelector("#progress-percent").textContent = `${percent}%`;
+      document.querySelector("#progress-track").setAttribute("aria-valuemax", ATTENDANCE_GOAL);
+      document.querySelector("#progress-track").setAttribute("aria-valuenow", Math.min(total, ATTENDANCE_GOAL));
+      document.querySelector("#progress-message").textContent = total >= ATTENDANCE_GOAL ? "Summit goal reached. Great work!" : total === 0 ? "The room is ready for you." : `${ATTENDANCE_GOAL - total} more to reach our goal.`;
+      document.querySelector("#recent-count").textContent = `${total} ${total === 1 ? "attendee" : "attendees"}`;
+      renderTeams();
+      renderAttendees();
+    }
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = nameInput.value.trim().replace(/\s+/g, " ");
+      const teamId = teamInput.value;
+      if (!name || !TEAMS.some((team) => team.id === teamId)) {
+        setGreeting("Enter a name and choose a team to check in.", true);
+        return;
+      }
+
+      if (attendees.some((attendee) => attendee.name.toLocaleLowerCase() === name.toLocaleLowerCase())) {
+        setGreeting(`${name} is already checked in.`, true);
+        nameInput.focus();
+        return;
+      }
+
+      attendees.push({
+        id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+        name,
+        team: teamId,
+        time: new Intl.DateTimeFormat(undefined, { hour: "numeric", minute: "2-digit" }).format(new Date())
+      });
+      saveAttendees();
+      render();
+      setGreeting(`Welcome to the summit, ${name}!`);
+      form.reset();
+      nameInput.focus();
+    });
+
+    attendeeList.addEventListener("click", (event) => {
+      const removeButton = event.target.closest("[data-remove]");
+      if (!removeButton) return;
+      const attendee = attendees.find((item) => item.id === removeButton.dataset.remove);
+      attendees = attendees.filter((item) => item.id !== removeButton.dataset.remove);
+      saveAttendees();
+      render();
+      if (attendee) setGreeting(`${attendee.name}'s check-in was removed.`);
+    });
+
+    render();
+  </script>
+</body>
+</html>
