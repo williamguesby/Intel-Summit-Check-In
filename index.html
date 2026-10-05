@@ -576,6 +576,67 @@
       .team-name { font-size: 10px; }
       .footer-note { flex-direction: row; }
     }
+
+    .hero-inner,
+    .attendance-summary,
+    .checkin-panel,
+    .team-panel,
+    .recent-panel {
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+    }
+
+    .hero-inner,
+    .attendance-summary,
+    .checkin-panel,
+    .team-panel,
+    .recent-panel,
+    .team-card,
+    .primary-button {
+      transition: transform .24s cubic-bezier(.2, .7, .2, 1), box-shadow .24s ease, background-color .2s ease;
+    }
+
+    .hero-inner { animation: soft-reveal .7s ease-out both; }
+    .attendance-summary { animation: soft-reveal .55s .08s ease-out both; }
+    .checkin-panel { animation: soft-reveal .6s .15s ease-out both; }
+    .team-panel { animation: soft-reveal .6s .22s ease-out both; }
+    .recent-panel { animation: soft-reveal .5s .28s ease-out both; }
+    .team-card { animation: soft-reveal .4s ease-out both; }
+    .team-card:nth-child(2) { animation-delay: .07s; }
+    .team-card:nth-child(3) { animation-delay: .14s; }
+    .hero-rule { animation: accent-glow 1.4s .35s ease-in-out both; }
+
+    @keyframes soft-reveal {
+      from { opacity: 0; filter: blur(3px); }
+      to { opacity: 1; filter: blur(0); }
+    }
+
+    @keyframes accent-glow {
+      0% { opacity: .45; }
+      55% { opacity: 1; }
+      100% { opacity: .8; }
+    }
+
+    @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+      .hero-inner { transform: translate3d(var(--motion-x, 0px), var(--motion-y, 0px), 0); }
+      .attendance-summary,
+      .checkin-panel,
+      .team-panel,
+      .recent-panel {
+        transform: perspective(1100px) rotateX(var(--motion-rotate-x, 0deg)) rotateY(var(--motion-rotate-y, 0deg)) translate3d(var(--motion-x, 0px), var(--motion-y, 0px), 0);
+      }
+
+      .team-card:hover { transform: translateY(-3px); box-shadow: 0 8px 18px rgb(43 37 70 / 12%); }
+      .primary-button:hover { transform: translateY(-2px); box-shadow: 0 7px 16px rgb(57 189 177 / 24%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-inner, .attendance-summary, .checkin-panel, .team-panel, .recent-panel,
+      .team-card, .primary-button, .hero-rule {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -814,7 +875,57 @@
       if (attendee) setGreeting(`${attendee.name}'s check-in was removed.`);
     });
 
+    function enablePointerDepth() {
+      const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!finePointer || reducedMotion) return;
+
+      const layers = [
+        { element: document.querySelector(".hero-inner"), depth: 7, tilt: 0 },
+        { element: document.querySelector(".attendance-summary"), depth: 2, tilt: 0.55 },
+        { element: document.querySelector(".checkin-panel"), depth: 3, tilt: 0.9 },
+        { element: document.querySelector(".team-panel"), depth: 4, tilt: 1.15 },
+        { element: document.querySelector(".recent-panel"), depth: 2, tilt: 0.55 }
+      ].filter((layer) => layer.element);
+      let pointer = null;
+      let frame = 0;
+
+      function clearMotion() {
+        pointer = null;
+        if (frame) window.cancelAnimationFrame(frame);
+        frame = 0;
+        layers.forEach(({ element }) => {
+          element.style.removeProperty("--motion-x");
+          element.style.removeProperty("--motion-y");
+          element.style.removeProperty("--motion-rotate-x");
+          element.style.removeProperty("--motion-rotate-y");
+        });
+      }
+
+      function applyMotion() {
+        frame = 0;
+        if (!pointer) return;
+        const x = (pointer.x / window.innerWidth - 0.5) * 2;
+        const y = (pointer.y / window.innerHeight - 0.5) * 2;
+        layers.forEach(({ element, depth, tilt }) => {
+          element.style.setProperty("--motion-x", `${(x * depth).toFixed(2)}px`);
+          element.style.setProperty("--motion-y", `${(y * depth).toFixed(2)}px`);
+          element.style.setProperty("--motion-rotate-x", `${(-y * tilt).toFixed(2)}deg`);
+          element.style.setProperty("--motion-rotate-y", `${(x * tilt).toFixed(2)}deg`);
+        });
+      }
+
+      window.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "mouse" && event.pointerType !== "pen") return;
+        pointer = { x: event.clientX, y: event.clientY };
+        if (!frame) frame = window.requestAnimationFrame(applyMotion);
+      }, { passive: true });
+      window.addEventListener("pointerleave", clearMotion);
+      window.addEventListener("blur", clearMotion);
+    }
+
     render();
+    enablePointerDepth();
   </script>
 </body>
 </html>
